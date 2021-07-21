@@ -2,7 +2,7 @@
 
 Goal of this library is to make life easy for developers who are looking to use Ebay's API for development. This library contains models and services that will wrap the communication logic to make your life easy.
 
-**Note** Ebay API tends to be quite unstable, lot of services, difficult to implement a flow as a 3rd party integrator and very questionable design decisions for Ebay's team. I have tried my best to cover the commerce part here. There is huge room for improvement and still a number of uncovered routes. Suggestions or contributions are always welcome.
+**Note:** Ebay API tends to be quite unstable, lot of services, difficult to implement a flow as a 3rd party integrator and very questionable design decisions for Ebay's team. I have tried my best to cover the commerce part here. There is huge room for improvement and still a number of uncovered routes. Suggestions or contributions are always welcome.
 
 ## Contributors
 
@@ -35,7 +35,7 @@ paket add Ebaysharp --project /path/to/project.fsproj
 ## Environments
 
 By default the environment is set to Production but you can change it for testing to sandbox
-**Import note** It is recommended to use production environment even for testing, Ebay's sandbox is absolutely crap, very unstable and useless. Pretty much most of the calls will fail without any reason of its sandbox and there are a lot of issues created on Ebay forums regarding that.
+**Import note:** It is recommended to use production environment even for testing, Ebay's sandbox is absolutely crap, very unstable and useless. Pretty much most of the calls will fail without any reason of its sandbox and there are a lot of issues created on Ebay forums regarding that.
 
 ### Possible Environments
 
@@ -121,7 +121,7 @@ do
 ```
 
 You can set the limit to how many records you want in each call.
-**Note** I know this is not the best way to do this, but at the time it served me the purpose. Will try to refactor the code soon to make it better and intuitive
+**Note:** I know this is not the best way to do this, but at the time it served me the purpose. Will try to refactor the code soon to make it better and intuitive
 
 # Resources
 
