@@ -9,12 +9,12 @@ namespace Ebaysharp.Services
         {
         }
 
-        public string GetRedirectUrl()
+        public string GetRedirectUrl(string state)
         {
             return $"{OAuthUrls.AuthUrl}?" +
                 $"client_id={ClientToken.clientId}&" +
                 $"redirect_uri={ClientToken.ruName}&" +
-                $"response_type=code&state={ClientToken.state}&" +
+                $"response_type=code&state={state}&" +
                 $"scope={ClientToken.scopes}&prompt=login";
         }
 

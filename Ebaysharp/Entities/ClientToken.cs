@@ -34,10 +34,6 @@ namespace Ebaysharp.Entities
         /// Scopes for auth request.
         /// </summary>
         public string scopes { get; set; }
-        /// <summary>
-        /// Information passed to ebay and received back during auth process.
-        /// </summary>
-        public string state { get; set; }
     }
 
     public class AccessToken
