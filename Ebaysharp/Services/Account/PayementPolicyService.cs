@@ -1,5 +1,6 @@
 ﻿using Ebaysharp.Entities;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Ebaysharp.Services.Account
 {
@@ -9,30 +10,30 @@ namespace Ebaysharp.Services.Account
         {
         }
 
-        public List<PaymentPolicy> GetAll()
+        public async Task<List<PaymentPolicy>> GetAllAsync()
         {
-            CreateAuthorizedRequest($"{AccountApiUrls.PayementPolicy}?marketplace_id={UsEbayMarketPlaceId}", RestSharp.Method.GET);
-            return ExecuteRequest<GetAllPaymentPoliciesResponse>().paymentPolicies;
+            await CreateAuthorizedRequestAsync($"{AccountApiUrls.PayementPolicy}?marketplace_id={UsEbayMarketPlaceId}", RestSharp.Method.GET);
+            return (await ExecuteRequestAsync<GetAllPaymentPoliciesResponse>()).paymentPolicies;
         }
 
-        public PaymentPolicy Add(PaymentPolicy paymentPolicy)
+        public async Task<PaymentPolicy> AddAsync(PaymentPolicy paymentPolicy)
         {
-            CreateAuthorizedRequestJson(AccountApiUrls.PayementPolicy, RestSharp.Method.POST);
+            await CreateAuthorizedRequestJsonAsync(AccountApiUrls.PayementPolicy, RestSharp.Method.POST);
             Request.AddJsonBody(paymentPolicy);
-            return ExecuteRequest<PaymentPolicy>();
+            return await ExecuteRequestAsync<PaymentPolicy>();
         }
 
-        public PaymentPolicy Update(PaymentPolicy paymentPolicy)
+        public async Task<PaymentPolicy> UpdateAsync(PaymentPolicy paymentPolicy)
         {
-            CreateAuthorizedRequestJson($"{AccountApiUrls.PayementPolicy}/{paymentPolicy.paymentPolicyId}", RestSharp.Method.PUT);
+            await CreateAuthorizedRequestJsonAsync($"{AccountApiUrls.PayementPolicy}/{paymentPolicy.paymentPolicyId}", RestSharp.Method.PUT);
             Request.AddJsonBody(paymentPolicy);
-            return ExecuteRequest<PaymentPolicy>();
+            return await ExecuteRequestAsync<PaymentPolicy>();
         }
 
-        public void Delete(long paymentPolicyId)
+        public async Task DeleteAsync(long paymentPolicyId)
         {
-            CreateAuthorizedRequest($"{AccountApiUrls.PayementPolicy}/{paymentPolicyId}", RestSharp.Method.DELETE);
-            ExecuteRequest();
+            await CreateAuthorizedRequestAsync($"{AccountApiUrls.PayementPolicy}/{paymentPolicyId}", RestSharp.Method.DELETE);
+            await ExecuteRequestAsync();
         }
     }
 }

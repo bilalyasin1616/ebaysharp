@@ -1,6 +1,7 @@
 ﻿using Ebaysharp.Entities;
 using Ebaysharp.Entities.Order;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Ebaysharp.Services.Fulfillment
 {
@@ -10,19 +11,19 @@ namespace Ebaysharp.Services.Fulfillment
         {
         }
 
-        public EbayList<Order, EbayFilter> GetAll(EbayFilter ebayFilter)
+        public async Task<EbayList<Order, EbayFilter>> GetAllAsync(EbayFilter ebayFilter)
         {
-            CreateAuthorizedPagedRequest(ebayFilter, FulfillmentApiUrls.Order, RestSharp.Method.GET);
-            var response = ExecuteRequest<OrdersResponse>();
+            await CreateAuthorizedPagedRequestAsync(ebayFilter, FulfillmentApiUrls.Order, RestSharp.Method.GET);
+            var response = await ExecuteRequestAsync<OrdersResponse>();
             ebayFilter.NextPage = response.next;
             return new EbayList<Order, EbayFilter>(ebayFilter, response.orders);
         }
 
-        public string CreateFulfillment(ShippingFulfilment shippingFulfilment, string orderId)
+        public async Task<string> CreateFulfillmentAsync(ShippingFulfilment shippingFulfilment, string orderId)
         {
-            CreateAuthorizedRequest($"{FulfillmentApiUrls.Order}/{orderId}/{FulfillmentApiUrls.ShippingFulfillment}", RestSharp.Method.POST);
+            await CreateAuthorizedRequestAsync($"{FulfillmentApiUrls.Order}/{orderId}/{FulfillmentApiUrls.ShippingFulfillment}", RestSharp.Method.POST);
             Request.AddJsonBody(shippingFulfilment);
-            var response = ExecuteRequest();
+            var response = await ExecuteRequestAsync();
             var locationHeader = response.Headers.ToList().Find(header => header.Name == "Location");
             var fulfillemtId = locationHeader.Value.ToString().Split("/").Last();
             return fulfillemtId;

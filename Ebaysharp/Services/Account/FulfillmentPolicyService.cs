@@ -1,5 +1,6 @@
 ﻿using Ebaysharp.Entities;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Ebaysharp.Services.Account
 {
@@ -9,30 +10,30 @@ namespace Ebaysharp.Services.Account
         {
         }
 
-        public List<FulfillmentPolicy> GetAll()
+        public async Task<List<FulfillmentPolicy>> GetAllAsync()
         {
-            CreateAuthorizedRequest($"{AccountApiUrls.FulfillmentPolicy}?marketplace_id={UsEbayMarketPlaceId}", RestSharp.Method.GET);
-            return ExecuteRequest<GetAllFulfillmentPoliciesResponse>().fulfillmentPolicies;
+            await CreateAuthorizedRequestAsync($"{AccountApiUrls.FulfillmentPolicy}?marketplace_id={UsEbayMarketPlaceId}", RestSharp.Method.GET);
+            return (await ExecuteRequestAsync<GetAllFulfillmentPoliciesResponse>()).fulfillmentPolicies;
         }
 
-        public FulfillmentPolicy Add(FulfillmentPolicy fulfillmentPolicy)
+        public async Task<FulfillmentPolicy> AddAsync(FulfillmentPolicy fulfillmentPolicy)
         {
-            CreateAuthorizedRequestJson(AccountApiUrls.FulfillmentPolicy, RestSharp.Method.POST);
+            await CreateAuthorizedRequestJsonAsync(AccountApiUrls.FulfillmentPolicy, RestSharp.Method.POST);
             Request.AddJsonBody(fulfillmentPolicy);
-            return ExecuteRequest<FulfillmentPolicy>();
+            return await ExecuteRequestAsync<FulfillmentPolicy>();
         }
 
-        public FulfillmentPolicy Update(FulfillmentPolicy fulfillmentPolicy)
+        public async Task<FulfillmentPolicy> UpdateAsync(FulfillmentPolicy fulfillmentPolicy)
         {
-            CreateAuthorizedRequestJson(AccountApiUrls.FulfillmentPolicy, RestSharp.Method.PUT);
+            await CreateAuthorizedRequestJsonAsync(AccountApiUrls.FulfillmentPolicy, RestSharp.Method.PUT);
             Request.AddJsonBody(fulfillmentPolicy);
-            return ExecuteRequest<FulfillmentPolicy>();
+            return await ExecuteRequestAsync<FulfillmentPolicy>();
         }
 
-        public void Delete(long fulfillmentPolicyId)
+        public async Task DeleteAsync(long fulfillmentPolicyId)
         {
-            CreateAuthorizedRequest($"{AccountApiUrls.FulfillmentPolicy}/{fulfillmentPolicyId}", RestSharp.Method.DELETE);
-            ExecuteRequest();
+            await CreateAuthorizedRequestAsync($"{AccountApiUrls.FulfillmentPolicy}/{fulfillmentPolicyId}", RestSharp.Method.DELETE);
+            await ExecuteRequestAsync();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Ebaysharp.Entities;
+using System.Threading.Tasks;
 
 namespace Ebaysharp.Services.Inventory
 {
@@ -8,44 +9,47 @@ namespace Ebaysharp.Services.Inventory
         {
         }
 
-        public OfferBase Get(string offerId)
+        public async Task<OfferBase> GetAsync(string offerId)
         {
-            CreateAuthorizedRequest($"{InventoryApiUrls.Offer}/{offerId}", RestSharp.Method.GET);
-            return ExecuteRequest<OfferBase>();
+            await CreateAuthorizedRequestAsync($"{InventoryApiUrls.Offer}/{offerId}", RestSharp.Method.GET);
+            return await ExecuteRequestAsync<OfferBase>();
         }
 
-        public EbayList<Offer, EbayFilter> GetAll(EbayFilter ebayFilter, string sku)
+        public async Task<EbayList<Offer, EbayFilter>> GetAllAsync(EbayFilter ebayFilter, string sku)
         {
-            CreateAuthorizedPagedRequest(ebayFilter, InventoryApiUrls.Offer, RestSharp.Method.GET);
+            await CreateAuthorizedPagedRequestAsync(ebayFilter, InventoryApiUrls.Offer, RestSharp.Method.GET);
             Request.AddQueryParameter("sku", sku);
-            var response = ExecuteRequest<OffersResponse>();
+            var response = await ExecuteRequestAsync<OffersResponse>();
             ebayFilter.NextPage = response.next;
             return new EbayList<Offer, EbayFilter>(ebayFilter, response.offers);
         }
 
-        public OfferResponse Add(Offer offer)
+        public async Task<OfferResponse> AddAsync(Offer offer)
         {
-            CreateRequestWithTokenAndContentLanguage(InventoryApiUrls.Offer, RestSharp.Method.POST);
+            await CreateRequestWithTokenAndContentLanguageAsync(InventoryApiUrls.Offer, RestSharp.Method.POST);
             Request.AddJsonBody(offer);
-            return ExecuteRequest<OfferResponse>();
+            return await ExecuteRequestAsync<OfferResponse>();
         }
 
-        public void Update(OfferBase offer, string offerId)
+        public async Task UpdateAsync(OfferBase offer, string offerId)
         {
-            CreateRequestWithTokenAndContentLanguage($"{InventoryApiUrls.Offer}/{offerId}", RestSharp.Method.PUT);
+            await CreateRequestWithTokenAndContentLanguageAsync($"{InventoryApiUrls.Offer}/{offerId}", RestSharp.Method.PUT);
             var jsonBody = Newtonsoft.Json.JsonConvert.SerializeObject(offer);
             Request.AddParameter("application/json", jsonBody, RestSharp.ParameterType.RequestBody);
-            ExecuteRequest();
+            await ExecuteRequestAsync();
         }
 
-        public Responses AddBulk(BulkOffer bulkOffer)
+        public async Task<Responses> AddBulkAsync(BulkOffer bulkOffer)
         {
-            CreateAuthorizedRequest(InventoryApiUrls.BulkCreateOffer, RestSharp.Method.POST);
+            await CreateAuthorizedRequestAsync(InventoryApiUrls.BulkCreateOffer, RestSharp.Method.POST);
             Request.AddHeader("content-type", "application/json");
             Request.AddJsonBody(bulkOffer);
-            var response = RequestClient.Execute<Responses>(Request);
+            var response = await RequestClient.ExecuteAsync<Responses>(Request);
             if (response.StatusCode == System.Net.HttpStatusCode.OK || response.StatusCode==System.Net.HttpStatusCode.MultiStatus)
                 return response.Data;
+            //Ebay Api weirdly throws bad request for dew offers when bulk request is sent, but on retry it will add the failed ones successfully
+            //But during the 2nd retry those offers which have been created will throw an error this piece of code will get their offer id and add it to response
+            //This is a temporary fix
             else if(response.StatusCode==System.Net.HttpStatusCode.BadRequest)
             {
                 if (response.Data != null)
@@ -71,12 +75,12 @@ namespace Ebaysharp.Services.Inventory
                 throw new EbayException("Ebay Api didn't respond with Okay, see exception for more details", response);
         }
 
-        public Responses PublishBulk(BulkOfferPublish bulkOfferPublish)
+        public async Task<Responses> PublishBulkAsync(BulkOfferPublish bulkOfferPublish)
         {
-            CreateAuthorizedRequest(InventoryApiUrls.BulkPublishOffer, RestSharp.Method.POST);
+            await CreateAuthorizedRequestAsync(InventoryApiUrls.BulkPublishOffer, RestSharp.Method.POST);
             Request.AddHeader("content-type", "application/json");
             Request.AddJsonBody(bulkOfferPublish);
-            var response = RequestClient.Execute<Responses>(Request);
+            var response = await RequestClient.ExecuteAsync<Responses>(Request);
             if (response.StatusCode == System.Net.HttpStatusCode.OK ||
                 response.StatusCode == System.Net.HttpStatusCode.MultiStatus)
                 return response.Data;
@@ -84,12 +88,12 @@ namespace Ebaysharp.Services.Inventory
                 throw new EbayException("Ebay Api didn't respond with Okay, see exception for more details", response);
         }
 
-        public OfferPublishByInventoryGroupResponse PublishByInventoryItemGroup(string inventoryItemGroupKey)
+        public async Task<OfferPublishByInventoryGroupResponse> PublishByInventoryItemGroupAsync(string inventoryItemGroupKey)
         {
-            CreateAuthorizedRequest($"{InventoryApiUrls.Offer}/publish_by_inventory_item_group", RestSharp.Method.POST);
+            await CreateAuthorizedRequestAsync($"{InventoryApiUrls.Offer}/publish_by_inventory_item_group", RestSharp.Method.POST);
             Request.AddHeader("content-type", "application/json");
             Request.AddJsonBody(new PublishOffersByInventoryGroup() { inventoryItemGroupKey = inventoryItemGroupKey, marketplaceId = UsEbayMarketPlaceId });
-            var response = RequestClient.Execute<OfferPublishByInventoryGroupResponse>(Request);
+            var response = await RequestClient.ExecuteAsync<OfferPublishByInventoryGroupResponse>(Request);
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 if (response.Data != null)
@@ -99,7 +103,7 @@ namespace Ebaysharp.Services.Inventory
             else
             {
                 //2nd try incase api throws bad request, no Sku are available for publish
-                response = RequestClient.Execute<OfferPublishByInventoryGroupResponse>(Request);
+                response = await RequestClient.ExecuteAsync<OfferPublishByInventoryGroupResponse>(Request);
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     if (response.Data != null)
@@ -111,17 +115,17 @@ namespace Ebaysharp.Services.Inventory
             }
         }
 
-        public void WithdrawByInventoryItemGroup(string inventoryItemGroupKey)
+        public async Task WithdrawByInventoryItemGroupAsync(string inventoryItemGroupKey)
         {
-            CreateAuthorizedRequestJson($"{InventoryApiUrls.Offer}/publish_by_inventory_item_group", RestSharp.Method.POST);
+            await CreateAuthorizedRequestJsonAsync($"{InventoryApiUrls.Offer}/publish_by_inventory_item_group", RestSharp.Method.POST);
             Request.AddJsonBody(new PublishOffersByInventoryGroup() { inventoryItemGroupKey = inventoryItemGroupKey, marketplaceId = UsEbayMarketPlaceId });
-            ExecuteRequest<WithdrawByInventoryGroupResponse>();
+            await ExecuteRequestAsync<WithdrawByInventoryGroupResponse>();
         }
 
-        public void Delete(string offerId)
+        public async Task DeleteAsync(string offerId)
         {
-            CreateAuthorizedRequest($"{InventoryApiUrls.Offer}/{offerId}", RestSharp.Method.DELETE);
-            ExecuteRequest();
+            await CreateAuthorizedRequestAsync($"{InventoryApiUrls.Offer}/{offerId}", RestSharp.Method.DELETE);
+            await ExecuteRequestAsync();
         }
 
 

@@ -1,7 +1,5 @@
 ﻿using Ebaysharp.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace Ebaysharp.Services.Inventory
 {
@@ -11,40 +9,40 @@ namespace Ebaysharp.Services.Inventory
         {
         }
 
-        public void CreateOrReplace(InventoryItem inventoryItem, string sku)
+        public async Task CreateOrReplaceAsync(InventoryItem inventoryItem, string sku)
         {
-            CreateRequestWithTokenAndContentLanguage($"{InventoryApiUrls.InventoryItemUrl}/{sku}", RestSharp.Method.PUT);
+            await CreateRequestWithTokenAndContentLanguageAsync($"{InventoryApiUrls.InventoryItemUrl}/{sku}", RestSharp.Method.PUT);
             var jsonBody = Newtonsoft.Json.JsonConvert.SerializeObject(inventoryItem);
             Request.AddParameter("application/json", jsonBody, RestSharp.ParameterType.RequestBody);
-            ExecuteRequest();
+            await ExecuteRequestAsync();
         }
 
-        public BulkInventoryItemResponses BulkCreateOrReplace(BulkInventoryItem bulkInventoryItem)
+        public async Task<BulkInventoryItemResponses> BulkCreateOrReplaceAsync(BulkInventoryItem bulkInventoryItem)
         {
-            CreateAuthorizedRequestJson(InventoryApiUrls.bulkCreateOrReplaceInventoryItemUrl, RestSharp.Method.POST);
+            await CreateAuthorizedRequestJsonAsync(InventoryApiUrls.bulkCreateOrReplaceInventoryItemUrl, RestSharp.Method.POST);
             var jsonBody = Newtonsoft.Json.JsonConvert.SerializeObject(bulkInventoryItem);
             Request.AddParameter("application/json", jsonBody, RestSharp.ParameterType.RequestBody);
-            return ExecuteRequest<BulkInventoryItemResponses>();
+            return await ExecuteRequestAsync<BulkInventoryItemResponses>();
         }
 
-        public InventoryItem Get(string sku)
+        public async Task<InventoryItem> GetAsync(string sku)
         {
-            CreateAuthorizedRequest($"{InventoryApiUrls.InventoryItemUrl}/{sku}", RestSharp.Method.GET);
-            return ExecuteRequest<InventoryItem>();
+            await CreateAuthorizedRequestAsync($"{InventoryApiUrls.InventoryItemUrl}/{sku}", RestSharp.Method.GET);
+            return await ExecuteRequestAsync<InventoryItem>();
         }
 
-        public EbayList<InventoryItem, EbayFilter> GetAll(EbayFilter ebayFilter)
+        public async Task<EbayList<InventoryItem, EbayFilter>> GetAllAsync(EbayFilter ebayFilter)
         {
-            CreateAuthorizedPagedRequest(ebayFilter, InventoryApiUrls.InventoryItemUrl, RestSharp.Method.GET);
-            var response = ExecuteRequest<InventoryItems>();
+            await CreateAuthorizedPagedRequestAsync(ebayFilter, InventoryApiUrls.InventoryItemUrl, RestSharp.Method.GET);
+            var response = await ExecuteRequestAsync<InventoryItems>();
             ebayFilter.NextPage = response.next;
             return new EbayList<InventoryItem, EbayFilter>(ebayFilter, response.inventoryItems);
         }
 
-        public void Delete(string sku)
+        public async Task DeleteAsync(string sku)
         {
-            CreateAuthorizedRequest($"{InventoryApiUrls.InventoryItemUrl}/{sku}", RestSharp.Method.DELETE);
-            ExecuteRequest();
+            await CreateAuthorizedRequestAsync($"{InventoryApiUrls.InventoryItemUrl}/{sku}", RestSharp.Method.DELETE);
+            await ExecuteRequestAsync();
         }
     }
 }

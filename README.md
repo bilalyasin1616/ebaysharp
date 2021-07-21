@@ -58,7 +58,7 @@ Redirect user to this url for getting access to their account with specified sco
 
 ```cs
 var authService = new OauthService(clientToken);
-var token = authService.GetAccessToken(code);
+var token = await authService.GetAccessTokenAsync(code);
 ```
 
 You can store these access tokens in your database and later use them to access the resources specified in the scopes
@@ -81,11 +81,11 @@ if(service.IsAccessTokenRefreshed(accessToken.date_last_updated))
 ```cs
 var limit = 10; //getting 10 records at a time
 var orderService = new OrderService(clientToken, accessToken);
-EbayList<ChannelOrder, EbayFilter> orders = null;
+EbayList<Order, EbayFilter> orders = null;
 do
 {
     var filter = orders != null ? orders.GetNextPageFilter() : new EbayFilter(limit);
-    orders = orderService.GetAll(filter);
+    orders = await orderService.GetAllAsync(filter);
 } while (orders.HasNextPage());
 ```
 
@@ -95,5 +95,53 @@ You can set the limit to how many records you want in each call.
 # Resources
 
 -   [Fulfillment Policy Service](#fulfillment-policy-service)
+-   [Payment Policy Service](#payment-policy-service)
+-   [Return Policy Service](#return-policy-service)
+-   [Identity Service](#identity-service)
+-   [Order Service](#order-service)
+-   [Inventory Item Group Service](#inventory-item-group-service)
+-   [Inventory Item Service](#inventory-item-service)
+-   [Listing Service](#listing-service)
+-   [Location Service](#location-service)
+-   [Catalog Service](#category-service)
+-   [Ebay Meta Service](#Ebay-meta-service)
+-   [Offer Service](#offer-service)
 
 ## <a name="fulfillment-policy-service"></a>Fulfillment Policy Service
+
+### Get all fulfillment policies
+
+```cs
+var limit = 10; //getting 10 records at a time
+var fulfilmentService = new FulfillmentPolicyService(clientToken, accessToken);
+EbayList<Order, EbayFilter> fulfilmentPolicies = null;
+do
+{
+    var filter = fulfilmentPolicies != null ? fulfilmentPolicies.GetNextPageFilter() : new EbayFilter(limit);
+    fulfilmentPolicies = await fulfilmentPolicies.GetAllAsync(filter);
+} while (fulfilmentPolicies.HasNextPage());
+```
+
+### Add fulfilment policy
+
+```cs
+var fulfilmentPolicy = new FulfillmentPolicy();
+var fulfilmentService = new FulfillmentPolicyService(clientToken, accessToken);
+fulfilmentPolicy = await fulfilmentService.AddAsync(fulfilmentPolicy);
+```
+
+### Update fulfilment policy
+
+```cs
+var fulfilmentPolicy = new FulfillmentPolicy();
+var fulfilmentService = new FulfillmentPolicyService(clientToken, accessToken);
+fulfilmentPolicy = await fulfilmentService.UpdateAsync(fulfilmentPolicy);
+```
+
+### Delete fulfilment policy
+
+```cs
+var fulfilmentPolicyId = 123456;
+var fulfilmentService = new FulfillmentPolicyService(clientToken, accessToken);
+await fulfilmentService.DeleteAsync(fulfilmentPolicyId);
+```

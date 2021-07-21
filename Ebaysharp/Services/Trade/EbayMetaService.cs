@@ -1,6 +1,7 @@
 ﻿using Ebaysharp.Entities;
 using Ebaysharp.Entities.TradeApi;
 using System.IO;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -13,9 +14,9 @@ namespace Ebaysharp.Services.Trade
         {
         }
 
-        public GeteBayDetailsResponse GetEbayDetails(string detailName = null)
+        public async Task<GeteBayDetailsResponse> GetEbayDetailsAsync(string detailName = null)
         {
-            RefreshToken();
+            await RefreshTokenAsync();
             CreateRequest(EbayXmlProductionUrl, RestSharp.Method.POST);
 
             Request.AddHeader("X-EBAY-API-IAF-TOKEN", AccessToken.access_token);
@@ -37,7 +38,7 @@ namespace Ebaysharp.Services.Trade
                 Request.AddParameter("Body", xml, "text/xml", RestSharp.ParameterType.RequestBody);
             }
 
-            var response = RequestClient.Execute<GeteBayDetailsResponse>(Request);
+            var response = await RequestClient.ExecuteAsync<GeteBayDetailsResponse>(Request);
 
             xmlserializer = new XmlSerializer(typeof(GeteBayDetailsResponse));
             using (TextReader reader = new StringReader(response.Content))

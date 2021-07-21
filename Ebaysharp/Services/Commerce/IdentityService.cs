@@ -1,5 +1,6 @@
 ﻿using Ebaysharp.Entities;
 using Ebaysharp.Entities.Identity;
+using System.Threading.Tasks;
 
 namespace Ebaysharp.Services.Commerce
 {
@@ -9,10 +10,10 @@ namespace Ebaysharp.Services.Commerce
         {
         }
 
-        public User GetUser()
+        public async Task<User> GetUserAsync()
         {
-            CreateAuthorizedRequest(IdentityApiUrls.GetUser, RestSharp.Method.GET);
-            return ExecuteRequest<User>();
+            await CreateAuthorizedRequestAsync(IdentityApiUrls.GetUser, RestSharp.Method.GET);
+            return await ExecuteRequestAsync<User>();
         }
     }
 }

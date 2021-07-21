@@ -2,6 +2,7 @@
 using RestSharp;
 using System;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace Ebaysharp.Services
 {
@@ -39,32 +40,32 @@ namespace Ebaysharp.Services
             Request = new RestRequest(method);
         }
 
-        protected void CreateAuthorizedRequest(string url, Method method)
+        protected async Task CreateAuthorizedRequestAsync(string url, Method method)
         {
-            RefreshToken();
+            await RefreshTokenAsync();
             CreateRequest(url, method);
             AddBearerToken();
         }
 
-        protected void CreateAuthorizedRequestJson(string url, Method method)
+        protected async Task CreateAuthorizedRequestJsonAsync(string url, Method method)
         {
-            RefreshToken();
+            await RefreshTokenAsync();
             CreateRequest(url, method);
             AddBearerToken();
             AddJsonContentType();
         }
 
-        protected void CreateRequestWithTokenAndContentLanguage(string url, Method method)
+        protected async Task CreateRequestWithTokenAndContentLanguageAsync(string url, Method method)
         {
-            RefreshToken();
+            await RefreshTokenAsync();
             CreateRequest(url, method);
             AddBearerToken();
             AddContentLanguage();
         }
 
-        protected void CreateAuthorizedPagedRequest(EbayFilter filter, string url, Method method)
+        protected async Task CreateAuthorizedPagedRequestAsync(EbayFilter filter, string url, Method method)
         {
-            RefreshToken();
+            await RefreshTokenAsync();
             if (filter.NextPage != null)
                 CreateRequest(filter.NextPage, method);
             else
@@ -80,9 +81,9 @@ namespace Ebaysharp.Services
         /// </summary>
         /// <typeparam name="T">Type to parse response to</typeparam>
         /// <returns>Returns data of T type</returns>
-        protected T ExecuteRequest<T>() where T: new()
+        protected async Task<T> ExecuteRequestAsync<T>() where T: new()
         {
-            var response = RequestClient.Execute<T>(Request);
+            var response = await RequestClient.ExecuteAsync<T>(Request);
             ParseResponse(response);
             return response.Data;
         }
@@ -92,9 +93,9 @@ namespace Ebaysharp.Services
         /// </summary>
         /// <typeparam name="T">Type to parse response to</typeparam>
         /// <returns>Returns raw response</returns>
-        protected IRestResponse ExecuteRequest()
+        protected async Task<IRestResponse> ExecuteRequestAsync()
         {
-            var response = RequestClient.Execute(Request);
+            var response = await RequestClient.ExecuteAsync(Request);
             ParseResponse(response);
             return response;
         }
@@ -132,9 +133,9 @@ namespace Ebaysharp.Services
             Request.AddHeader("Content-Type", "application/json");
         }
 
-        protected void RefreshToken()
+        protected async Task RefreshTokenAsync()
         {
-            AccessToken = OauthService.RefreshToken(ClientToken, AccessToken);
+            AccessToken = await OauthService.RefreshTokenAsync(ClientToken, AccessToken);
         }
 
     }

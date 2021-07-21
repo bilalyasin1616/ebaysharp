@@ -1,4 +1,5 @@
 ﻿using Ebaysharp.Entities;
+using System.Threading.Tasks;
 
 namespace Ebaysharp.Services.Inventory
 {
@@ -8,31 +9,31 @@ namespace Ebaysharp.Services.Inventory
         {
         }
 
-        public void Add(string marchentLocationKey, InventoryLocation location)
+        public async Task AddAsync(string marchentLocationKey, InventoryLocation location)
         {
-            CreateAuthorizedRequestJson($"{InventoryApiUrls.Location}/{marchentLocationKey}", RestSharp.Method.POST);
+            await CreateAuthorizedRequestJsonAsync($"{InventoryApiUrls.Location}/{marchentLocationKey}", RestSharp.Method.POST);
             Request.AddJsonBody(location);
-            ExecuteRequest();
+            await ExecuteRequestAsync();
         }
 
-        public void Delete(string marchentLocationKey)
+        public async Task DeleteAsync(string marchentLocationKey)
         {
-            CreateAuthorizedRequest($"{InventoryApiUrls.Location}/{marchentLocationKey}", RestSharp.Method.DELETE);
-            ExecuteRequest();
+            await CreateAuthorizedRequestAsync($"{InventoryApiUrls.Location}/{marchentLocationKey}", RestSharp.Method.DELETE);
+            await ExecuteRequestAsync();
         }
 
-        public EbayList<InventoryLocation, EbayFilter> GetAll(EbayFilter ebayFilter)
+        public async Task<EbayList<InventoryLocation, EbayFilter>> GetAllAsync(EbayFilter ebayFilter)
         {
-            CreateAuthorizedPagedRequest(ebayFilter, InventoryApiUrls.Location, RestSharp.Method.GET);
-            var response = ExecuteRequest<LocationsRespones>();
+            await CreateAuthorizedPagedRequestAsync(ebayFilter, InventoryApiUrls.Location, RestSharp.Method.GET);
+            var response = await ExecuteRequestAsync<LocationsRespones>();
             ebayFilter.NextPage = response.next;
             return new EbayList<InventoryLocation, EbayFilter>(ebayFilter, response.locations);
         }
 
-        public InventoryLocation Get(string marchentLocationKey)
+        public async Task<InventoryLocation> GetAsync(string marchentLocationKey)
         {
-            CreateAuthorizedRequest($"{InventoryApiUrls.Location}/{marchentLocationKey}", RestSharp.Method.GET);
-            return ExecuteRequest<InventoryLocation>();
+            await CreateAuthorizedRequestAsync($"{InventoryApiUrls.Location}/{marchentLocationKey}", RestSharp.Method.GET);
+            return await ExecuteRequestAsync<InventoryLocation>();
         }
     }
 }

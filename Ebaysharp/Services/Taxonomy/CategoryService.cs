@@ -1,4 +1,5 @@
 ﻿using Ebaysharp.Entities;
+using System.Threading.Tasks;
 
 namespace Ebaysharp.Services.Taxonomy
 {
@@ -7,22 +8,22 @@ namespace Ebaysharp.Services.Taxonomy
         public CategoryService(ClientToken oauth, AccessToken token) : base(oauth, token)
         {
         }
-        public CategoryTree GetCategoryTreeRoot()
+        public async Task<CategoryTree> GetCategoryTreeRootAsync()
         {
-            CreateAuthorizedRequest($"{TaxonomyApiUrls.getDefaultCategoryTreeIdUrl}?marketplace_id={UsEbayMarketPlaceId}", RestSharp.Method.GET);
-            return ExecuteRequest<CategoryTree>();
+            await CreateAuthorizedRequestAsync($"{TaxonomyApiUrls.getDefaultCategoryTreeIdUrl}?marketplace_id={UsEbayMarketPlaceId}", RestSharp.Method.GET);
+            return await ExecuteRequestAsync<CategoryTree>();
         }
 
-        public CategoryTree GetCategoryTreeNode(CategoryTree categoryTree)
+        public async Task<CategoryTree> GetCategoryTreeNodeAsync(CategoryTree categoryTree)
         {
-            CreateAuthorizedRequest($"{TaxonomyApiUrls.CategoryTreeUrl}/{categoryTree.categoryTreeId}", RestSharp.Method.GET);
-            return ExecuteRequest<CategoryTree>();
+            await CreateAuthorizedRequestAsync($"{TaxonomyApiUrls.CategoryTreeUrl}/{categoryTree.categoryTreeId}", RestSharp.Method.GET);
+            return await ExecuteRequestAsync<CategoryTree>();
         }
 
-        public ItemAspectsForCategory GetItemAspectsForCategory(string categoryTreeId, string categoryId)
+        public async Task<ItemAspectsForCategory> GetItemAspectsForCategoryAsync(string categoryTreeId, string categoryId)
         {
-            CreateAuthorizedRequest($"{TaxonomyApiUrls.CategoryTreeUrl}/{categoryTreeId}{TaxonomyApiUrls.GetItemAspectsForCategory}?category_id={categoryId}", RestSharp.Method.GET);
-            return ExecuteRequest<ItemAspectsForCategory>();
+            await CreateAuthorizedRequestAsync($"{TaxonomyApiUrls.CategoryTreeUrl}/{categoryTreeId}{TaxonomyApiUrls.GetItemAspectsForCategory}?category_id={categoryId}", RestSharp.Method.GET);
+            return await ExecuteRequestAsync<ItemAspectsForCategory>();
         }
     }
 }

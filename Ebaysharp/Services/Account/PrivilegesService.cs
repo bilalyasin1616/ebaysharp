@@ -1,4 +1,5 @@
 ﻿using Ebaysharp.Entities;
+using System.Threading.Tasks;
 
 namespace Ebaysharp.Services.Account
 {
@@ -8,10 +9,10 @@ namespace Ebaysharp.Services.Account
         {
         }
 
-        public Privilege GetPrivilege()
+        public async Task<Privilege> GetPrivilegeAsync()
         {
-            CreateAuthorizedRequest(AccountApiUrls.Privilege, RestSharp.Method.GET);
-            return ExecuteRequest<Privilege>();
+            await CreateAuthorizedRequestAsync(AccountApiUrls.Privilege, RestSharp.Method.GET);
+            return await ExecuteRequestAsync<Privilege>();
         }
     }
 }
