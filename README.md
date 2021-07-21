@@ -6,8 +6,8 @@ Goal of this library is to make life easy for developers who are looking to use 
 
 ## Contributors
 
-If anyone would like to contribute to this package, email me at [bilalyasin1616@gmail.com](mailto:bilalyasin1616@gmail.com)
-I would love to get some help so we can increase the API coverage and make it great package
+If anyone would like to contribute to this package, email me at [bilalyasin1616@gmail.com](mailto:bilalyasin1616@gmail.com).
+I would love to get some help so we can increase the API coverage and make it great package.
 
 # Installation
 
