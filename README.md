@@ -1,5 +1,14 @@
 # Ebaysharp .Net Library for Ebay API
 
+Goal of this library is to make life easy for developers who are looking to use Ebay's API for development. This library contains models and services that will wrap the communication logic to make your life easy.
+
+**Note** Ebay API tends to be quite unstable, lot of services, difficult to implement a flow as a 3rd party integrator and very questionable design decisions for Ebay's team. I have tried my best to cover the commerce part here. There is huge room for improvement and still a number of uncovered routes. Suggestions or contributions are always welcome.
+
+## Contributors
+
+If anyone would like to contribute to this package, email me at [bilalyasin1616@gmail.com](mailto:bilalyasin1616@gmail.com)
+I would love to get some help so we can increase the API coverage and make it great package
+
 # Installation
 
 Ebaysharp is [available on NuGet](https://www.nuget.org/packages/Ebaysharp/). Use the package manager
@@ -23,9 +32,31 @@ paket add Ebaysharp --project /path/to/project.fsproj
 
 # Topics
 
+## Environments
+
+By default the environment is set to Production but you can change it for testing to sandbox
+**Import note** It is recommended to use production environment even for testing, Ebay's sandbox is absolutely crap, very unstable and useless. Pretty much most of the calls will fail without any reason of its sandbox and there are a lot of issues created on Ebay forums regarding that.
+
+### Possible Environments
+
+```cs
+public enum Environments
+{
+    Sandbox, Production
+}
+```
+
+### Setting environment
+
+You need to setup the environment once in your project before calling the services
+
+```cs
+EnvironmentManager.Environment = Environments.Sandbox;
+```
+
 ## Creating ClientToken object
 
-ClientToken object is used to initilize all services, so make sure all the information in this are correct.
+ClientToken object is used to initialize all services, so make sure all the information in this are correct.
 Otherwise call to the API will not work.
 
 ```cs
@@ -36,12 +67,12 @@ var clientToken = new ClientToken()
     devId = "Your devId",
     oauthCredentials = "Your clientId:clientSecret base64 encoded",
     ruName = "Your ruName from developer portal",
-    scopes = "Space seperated scopes from Ebay API"
+    scopes = "Space separated scopes from Ebay API"
 };
 ```
-**oauthCredentials** is clientId:clientSecret base64 encoded string. Will refactore and remove this requirement soon as it can be done internally.
+**oauthCredentials** is clientId:clientSecret base64 encoded string. Will refactored and remove this requirement soon as it can be done internally.
 **ruName** is unique identifier for your redirect url, that can be found in your developer portal
-**scopes** string of scopes seperated by a space each. [more on oauth scopes](https://developer.ebay.com/api-docs/static/oauth-scopes.html)
+**scopes** string of scopes separated by a space each. [more on oauth scopes](https://developer.ebay.com/api-docs/static/oauth-scopes.html)
 
 ## Getting access tokens
 
@@ -90,14 +121,14 @@ do
 ```
 
 You can set the limit to how many records you want in each call.
-**Note** I know this is not the best way to do this, but at the time it served me the purpose. Will try to refactor the code soon to make it better and intuative
+**Note** I know this is not the best way to do this, but at the time it served me the purpose. Will try to refactor the code soon to make it better and intuitive
 
 # Resources
 
 -   [Fulfillment Policy Service](#fulfillment-policy-service)
 -   [Payment Policy Service](#payment-policy-service)
 -   [Return Policy Service](#return-policy-service)
--   [Privilages Service](#privilages-service)
+-   [Privileges Service](#privilages-service)
 -   [Identity Service](#identity-service)
 -   [Order Service](#order-service)
 -   [Inventory Item Group Service](#inventory-item-group-service)
@@ -225,13 +256,13 @@ var returnService = new ReturnPolicyService(clientToken, accessToken);
 await returnService.DeleteAsync(returnPolicyId);
 ```
 
-## <a name="privilages-service"></a>Privilages Service
+## <a name="privileges-service"></a>Privileges Service
 
 ### Get user privileges
 
 ```cs
 var privilegesService = new PrivilegesService(clientToken, accessToken);
-var prilages = await privilegesService.GetPrivilegeAsync();
+var privileges = await privilegesService.GetPrivilegeAsync();
 ```
 
 ## <a name="identity-service"></a>Identity Service
@@ -262,14 +293,14 @@ do
 
 ```cs
 var orderId = "12121";
-var shippingFulfillment = new ShippingFulfilment();
+var shippingFulfillment = new ShippingFulfillment();
 var orderService = new OrderService(clientToken, accessToken);
 var fulfillmentId = await orderService.CreateFulfillmentAsync(shippingFulfillment, orderId);
 ```
 
-## <a name="inventory-item-group-service"></a>Intentory Item Group Service
+## <a name="inventory-item-group-service"></a>Inventory Item Group Service
 
-### Create or replace intentory item group
+### Create or replace inventory item group
 
 ```cs
 var inventoryItemGroupKey = "test-group";
@@ -278,7 +309,7 @@ var inventoryItemGroupService = new InventoryItemGroupService(clientToken, acces
 await inventoryItemGroupService.CreateOrReplaceInventoryItemGroupAsync(inventoryItemGroup, inventoryItemGroupKey);
 ```
 
-### Get intentory item group
+### Get inventory item group
 
 ```cs
 var inventoryItemGroupKey = "test-group";
@@ -286,7 +317,7 @@ var inventoryItemGroupService = new InventoryItemGroupService(clientToken, acces
 var inventoryItemGroup = await inventoryItemGroupService.GetInventoryItemsGroupAsync(inventoryItemGroupKey);
 ```
 
-### Delete intentory item group
+### Delete inventory item group
 
 ```cs
 var inventoryItemGroupKey = "test-group";
@@ -294,9 +325,9 @@ var inventoryItemGroupService = new InventoryItemGroupService(clientToken, acces
 await inventoryItemGroupService.DeleteGroupInventoryItemsAsync(inventoryItemGroupKey);
 ```
 
-## <a name="inventory-item-service"></a>Intentory Item Service
+## <a name="inventory-item-service"></a>Inventory Item Service
 
-### Create or replace intentory item
+### Create or replace inventory item
 
 ```cs
 var sku = "test-sku";
@@ -305,7 +336,7 @@ var inventoryItemService = new InventoryItemService(clientToken, accessToken);
 await inventoryItemService.CreateOrReplaceAsync(inventoryItem, sku);
 ```
 
-### Bulk create or replace intentory items
+### Bulk create or replace inventory items
 
 ```cs
 var bulkInventoryItem = new BulkInventoryItem();
@@ -313,7 +344,7 @@ var inventoryItemService = new InventoryItemService(clientToken, accessToken);
 var bulkInventoryItemResponses = await inventoryItemService.BulkCreateOrReplaceAsync(bulkInventoryItem);
 ```
 
-### Get intentory item
+### Get inventory item
 
 ```cs
 var sku = "test-sku";
@@ -334,7 +365,7 @@ do
 } while (inventoryItems.HasNextPage());
 ```
 
-### Delete intentory item
+### Delete inventory item
 
 ```cs
 var sku = "test-sku";
@@ -347,18 +378,18 @@ await inventoryItemService.DeleteAsync(sku);
 ### Add location
 
 ```cs
-var marchentLocationKey = "unique-location-identifier";
+var merchantLocationKey = "unique-location-identifier";
 var inventoryLocation = new InventoryLocation();
 var locationService = new LocationService(clientToken, accessToken);
-await locationService.AddAsync(marchentLocationKey, inventoryLocation);
+await locationService.AddAsync(merchantLocationKey, inventoryLocation);
 ```
 
 ### Delete location
 
 ```cs
-var marchentLocationKey = "unique-location-identifier";
+var merchantLocationKey = "unique-location-identifier";
 var locationService = new LocationService(clientToken, accessToken);
-await locationService.DeleteAsync(marchentLocationKey);
+await locationService.DeleteAsync(merchantLocationKey);
 ```
 
 ### Get all locations
@@ -377,9 +408,9 @@ do
 ### Get location
 
 ```cs
-var marchentLocationKey = "unique-location-identifier";
+var merchantLocationKey = "unique-location-identifier";
 var locationService = new LocationService(clientToken, accessToken);
-var inventoryLocation = await locationService.GetAsync(sku);
+var inventoryLocation = await locationService.GetAsync(merchantLocationKey);
 ```
 
 ## <a name="offer-service"></a>Offer Service
