@@ -97,15 +97,16 @@ You can set the limit to how many records you want in each call.
 -   [Fulfillment Policy Service](#fulfillment-policy-service)
 -   [Payment Policy Service](#payment-policy-service)
 -   [Return Policy Service](#return-policy-service)
+-   [Privilages Service](#privilages-service)
 -   [Identity Service](#identity-service)
 -   [Order Service](#order-service)
 -   [Inventory Item Group Service](#inventory-item-group-service)
 -   [Inventory Item Service](#inventory-item-service)
--   [Listing Service](#listing-service)
 -   [Location Service](#location-service)
 -   [Catalog Service](#category-service)
 -   [Ebay Meta Service](#Ebay-meta-service)
 -   [Offer Service](#offer-service)
+-   [Meta Service](#meta-service)
 
 ## <a name="fulfillment-policy-service"></a>Fulfillment Policy Service
 
@@ -113,35 +114,357 @@ You can set the limit to how many records you want in each call.
 
 ```cs
 var limit = 10; //getting 10 records at a time
-var fulfilmentService = new FulfillmentPolicyService(clientToken, accessToken);
-EbayList<Order, EbayFilter> fulfilmentPolicies = null;
+var fulfillmentService = new FulfillmentPolicyService(clientToken, accessToken);
+EbayList<Order, EbayFilter> fulfillmentPolicies = null;
 do
 {
-    var filter = fulfilmentPolicies != null ? fulfilmentPolicies.GetNextPageFilter() : new EbayFilter(limit);
-    fulfilmentPolicies = await fulfilmentPolicies.GetAllAsync(filter);
-} while (fulfilmentPolicies.HasNextPage());
+    var filter = fulfillmentPolicies != null ? fulfillmentPolicies.GetNextPageFilter() : new EbayFilter(limit);
+    fulfillmentPolicies = await fulfillmentPolicies.GetAllAsync(filter);
+} while (fulfillmentPolicies.HasNextPage());
 ```
 
-### Add fulfilment policy
+### Add fulfillment policy
 
 ```cs
-var fulfilmentPolicy = new FulfillmentPolicy();
-var fulfilmentService = new FulfillmentPolicyService(clientToken, accessToken);
-fulfilmentPolicy = await fulfilmentService.AddAsync(fulfilmentPolicy);
+var fulfillmentPolicy = new FulfillmentPolicy();
+var fulfillmentService = new FulfillmentPolicyService(clientToken, accessToken);
+fulfillmentPolicy = await fulfillmentService.AddAsync(fulfillmentPolicy);
 ```
 
-### Update fulfilment policy
+### Update fulfillment policy
 
 ```cs
-var fulfilmentPolicy = new FulfillmentPolicy();
-var fulfilmentService = new FulfillmentPolicyService(clientToken, accessToken);
-fulfilmentPolicy = await fulfilmentService.UpdateAsync(fulfilmentPolicy);
+var fulfillmentPolicy = new FulfillmentPolicy();
+var fulfillmentService = new FulfillmentPolicyService(clientToken, accessToken);
+fulfillmentPolicy = await fulfillmentService.UpdateAsync(fulfillmentPolicy);
 ```
 
-### Delete fulfilment policy
+### Delete fulfillment policy
 
 ```cs
-var fulfilmentPolicyId = 123456;
-var fulfilmentService = new FulfillmentPolicyService(clientToken, accessToken);
-await fulfilmentService.DeleteAsync(fulfilmentPolicyId);
+var fulfillmentPolicyId = 123456;
+var fulfillmentService = new FulfillmentPolicyService(clientToken, accessToken);
+await fulfillmentService.DeleteAsync(fulfillmentPolicyId);
+```
+
+## <a name="payment-policy-service"></a>Payment Policy Service
+
+### Get all payment policies
+
+```cs
+var limit = 10; //getting 10 records at a time
+var paymentService = new PaymentPolicyService(clientToken, accessToken);
+EbayList<Order, EbayFilter> paymentPolicies = null;
+do
+{
+    var filter = paymentPolicies != null ? paymentPolicies.GetNextPageFilter() : new EbayFilter(limit);
+    paymentPolicies = await paymentPolicies.GetAllAsync(filter);
+} while (paymentPolicies.HasNextPage());
+```
+
+### Add payment policy
+
+```cs
+var paymentPolicy = new PaymentPolicy();
+var paymentService = new PaymentPolicyService(clientToken, accessToken);
+paymentPolicy = await paymentService.AddAsync(paymentPolicy);
+```
+
+### Update payment policy
+
+```cs
+var paymentPolicy = new PaymentPolicy();
+var paymentService = new PaymentPolicyService(clientToken, accessToken);
+paymentPolicy = await paymentService.UpdateAsync(paymentPolicy);
+```
+
+### Delete payment policy
+
+```cs
+var paymentPolicyId = 123456;
+var paymentService = new PaymentPolicyService(clientToken, accessToken);
+await paymentService.DeleteAsync(paymentPolicyId);
+```
+
+## <a name="return-policy-service"></a>Return Policy Service
+
+### Get all return policies
+
+```cs
+var limit = 10; //getting 10 records at a time
+var returnService = new returnPolicyService(clientToken, accessToken);
+EbayList<Order, EbayFilter> returnPolicies = null;
+do
+{
+    var filter = returnPolicies != null ? returnPolicies.GetNextPageFilter() : new EbayFilter(limit);
+    returnPolicies = await returnPolicies.GetAllAsync(filter);
+} while (returnPolicies.HasNextPage());
+```
+
+### Add return policy
+
+```cs
+var returnPolicy = new returnPolicy();
+var returnService = new ReturnPolicyService(clientToken, accessToken);
+returnPolicy = await returnService.AddAsync(returnPolicy);
+```
+
+### Update return policy
+
+```cs
+var returnPolicy = new returnPolicy();
+var returnService = new ReturnPolicyService(clientToken, accessToken);
+returnPolicy = await returnService.UpdateAsync(returnPolicy);
+```
+
+### Delete return policy
+
+```cs
+var returnPolicyId = 123456;
+var returnService = new ReturnPolicyService(clientToken, accessToken);
+await returnService.DeleteAsync(returnPolicyId);
+```
+
+## <a name="privilages-service"></a>Privilages Service
+
+### Get user privileges
+
+```cs
+var privilegesService = new PrivilegesService(clientToken, accessToken);
+var prilages = await privilegesService.GetPrivilegeAsync();
+```
+
+## <a name="identity-service"></a>Identity Service
+
+### Get user
+
+```cs
+var identityService = new IdentityService(clientToken, accessToken);
+var user = await identityService.GetUserAsync();
+```
+
+## <a name="order-service"></a>Order Service
+
+### Get all orders
+
+```cs
+var limit = 10; //getting 10 records at a time
+var orderService = new OrderService(clientToken, accessToken);
+EbayList<Order, EbayFilter> orders = null;
+do
+{
+    var filter = orders != null ? orders.GetNextPageFilter() : new EbayFilter(limit);
+    orders = await orderService.GetAllAsync(filter);
+} while (orders.HasNextPage());
+```
+
+### Create order fulfillment
+
+```cs
+var orderId = "12121";
+var shippingFulfillment = new ShippingFulfilment();
+var orderService = new OrderService(clientToken, accessToken);
+var fulfillmentId = await orderService.CreateFulfillmentAsync(shippingFulfillment, orderId);
+```
+
+## <a name="inventory-item-group-service"></a>Intentory Item Group Service
+
+### Create or replace intentory item group
+
+```cs
+var inventoryItemGroupKey = "test-group";
+var inventoryItemGroup = new InventoryItemGroup();
+var inventoryItemGroupService = new InventoryItemGroupService(clientToken, accessToken);
+await inventoryItemGroupService.CreateOrReplaceInventoryItemGroupAsync(inventoryItemGroup, inventoryItemGroupKey);
+```
+
+### Get intentory item group
+
+```cs
+var inventoryItemGroupKey = "test-group";
+var inventoryItemGroupService = new InventoryItemGroupService(clientToken, accessToken);
+var inventoryItemGroup = await inventoryItemGroupService.GetInventoryItemsGroupAsync(inventoryItemGroupKey);
+```
+
+### Delete intentory item group
+
+```cs
+var inventoryItemGroupKey = "test-group";
+var inventoryItemGroupService = new InventoryItemGroupService(clientToken, accessToken);
+await inventoryItemGroupService.DeleteGroupInventoryItemsAsync(inventoryItemGroupKey);
+```
+
+## <a name="inventory-item-service"></a>Intentory Item Service
+
+### Create or replace intentory item
+
+```cs
+var sku = "test-sku";
+var inventoryItem = new InventoryItem();
+var inventoryItemService = new InventoryItemService(clientToken, accessToken);
+await inventoryItemService.CreateOrReplaceAsync(inventoryItem, sku);
+```
+
+### Bulk create or replace intentory items
+
+```cs
+var bulkInventoryItem = new BulkInventoryItem();
+var inventoryItemService = new InventoryItemService(clientToken, accessToken);
+var bulkInventoryItemResponses = await inventoryItemService.BulkCreateOrReplaceAsync(bulkInventoryItem);
+```
+
+### Get intentory item
+
+```cs
+var sku = "test-sku";
+var inventoryItemService = new InventoryItemService(clientToken, accessToken);
+var inventoryItem = await inventoryItemService.GetAsync(sku);
+```
+
+### Get all inventory items
+
+```cs
+var limit = 10; //getting 10 records at a time
+var inventoryItemService = new InventoryItemService(clientToken, accessToken);
+EbayList<InventoryItem, EbayFilter> inventoryItems = null;
+do
+{
+    var filter = inventoryItems != null ? inventoryItems.GetNextPageFilter() : new EbayFilter(limit);
+    inventoryItems = await inventoryItemService.GetAllAsync(filter);
+} while (inventoryItems.HasNextPage());
+```
+
+### Delete intentory item
+
+```cs
+var sku = "test-sku";
+var inventoryItemService = new InventoryItemService(clientToken, accessToken);
+await inventoryItemService.DeleteAsync(sku);
+```
+
+## <a name="location-service"></a>Location Service
+
+### Add location
+
+```cs
+var marchentLocationKey = "unique-location-identifier";
+var inventoryLocation = new InventoryLocation();
+var locationService = new LocationService(clientToken, accessToken);
+await locationService.AddAsync(marchentLocationKey, inventoryLocation);
+```
+
+### Delete location
+
+```cs
+var marchentLocationKey = "unique-location-identifier";
+var locationService = new LocationService(clientToken, accessToken);
+await locationService.DeleteAsync(marchentLocationKey);
+```
+
+### Get all locations
+
+```cs
+var limit = 10; //getting 10 records at a time
+var locationService = new LocationService(clientToken, accessToken);
+EbayList<InventoryLocation, EbayFilter> locations = null;
+do
+{
+    var filter = locations != null ? locations.GetNextPageFilter() : new EbayFilter(limit);
+    locations = await locationService.GetAllAsync(filter);
+} while (locations.HasNextPage());
+```
+
+### Get location
+
+```cs
+var marchentLocationKey = "unique-location-identifier";
+var locationService = new LocationService(clientToken, accessToken);
+var inventoryLocation = await locationService.GetAsync(sku);
+```
+
+## <a name="offer-service"></a>Offer Service
+
+### Add offer
+
+```cs
+var offer = new Offer();
+var offerService = new OfferService(clientToken, accessToken);
+var offerResponse = await offerService.AddAsync(offer);
+```
+
+### Add offer bulk
+
+```cs
+var bulkOffers = new BulkOffer();
+var offerService = new OfferService(clientToken, accessToken);
+var offersResponse = await offerService.AddBulkAsync(bulkOffers);
+```
+
+### Delete offer
+
+```cs
+var offerId = "offer id";
+var offerService = new OfferService(clientToken, accessToken);
+await offerService.DeleteAsync(offerId);
+```
+
+### Get offer
+
+```cs
+var offerId = "offer id";
+var offerService = new OfferService(clientToken, accessToken);
+var offer = await offerService.GetAsync(offerId);
+```
+
+### Get all offer
+
+```cs
+var limit = 10; //getting 10 records at a time
+var offerService = new OfferService(clientToken, accessToken);
+EbayList<InventoryLocation, EbayFilter> offers = null;
+do
+{
+    var filter = offers != null ? offers.GetNextPageFilter() : new EbayFilter(limit);
+    offers = await offerService.GetAllAsync(filter);
+} while (offers.HasNextPage());
+```
+
+### Publish inventory items group
+
+```cs
+var inventoryItemGroupKey = "inventory item group key";
+var offerService = new OfferService(clientToken, accessToken);
+var offerPublishByInventoryGroupResponse = await offerService.PublishByInventoryItemGroupAsync(inventoryItemGroupKey);
+```
+
+### Publish bulk offers
+
+```cs
+var bulkOfferPublish = new BulkOfferPublish();
+var offerService = new OfferService(clientToken, accessToken);
+var bulkPublishResponse = await offerService.PublishBulkAsync(bulkOfferPublish);
+```
+
+### Update offer
+
+```cs
+var offer = new Offer();
+var offerService = new OfferService(clientToken, accessToken);
+await offerService.UpdateAsync(offer);
+```
+
+### Withdraw offers by inventory item group
+
+```cs
+var inventoryItemGroupKey = "inventory item group key";
+var offerService = new OfferService(clientToken, accessToken);
+await offerService.WithdrawByInventoryItemGroupAsync(inventoryItemGroupKey);
+```
+
+## <a name="meta-service"></a>Meta Service
+
+```cs
+var detailName = "detail name";
+var ebayMetaService = new EbayMetaService(clientToken, accessToken);
+var geteBayDetailsResponse = await ebayMetaService.GetEbayDetailsAsync(detailName);
 ```

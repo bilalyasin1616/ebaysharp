@@ -130,7 +130,7 @@
             {
                 get => $"{ApiBaseUrl}{_resourceBaseUrl}/fulfillment_policy";
             }
-            public static string PayementPolicy
+            public static string PaymentPolicy
             {
                 get => $"{ApiBaseUrl}{_resourceBaseUrl}/payment_policy";
             }
