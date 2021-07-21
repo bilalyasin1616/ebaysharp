@@ -29,7 +29,7 @@ ClientToken object is used to initilize all services, so make sure all the infor
 Otherwise call to the API will not work.
 
 ```cs
-var clientToken = new EbaySharp.Entities.ClientToken()
+var clientToken = new ClientToken()
 {
     clientId = "Your clientId",
     clientSecret = "Your clientSecret",
@@ -76,3 +76,24 @@ if(service.IsAccessTokenRefreshed(accessToken.date_last_updated))
     service.AccessToken; //you can use this access token object to update tokens in your store
 ```
 
+## Sample for getting a list of all objects from a resource while managing pagination
+
+```cs
+var limit = 10; //getting 10 records at a time
+var orderService = new OrderService(clientToken, accessToken);
+EbayList<ChannelOrder, EbayFilter> orders = null;
+do
+{
+    var filter = orders != null ? orders.GetNextPageFilter() : new EbayFilter(limit);
+    orders = orderService.GetAll(filter);
+} while (orders.HasNextPage());
+```
+
+You can set the limit to how many records you want in each call.
+**Note** I know this is not the best way to do this, but at the time it served me the purpose. Will try to refactor the code soon to make it better and intuative
+
+# Resources
+
+-   [Fulfillment Policy Service](#fulfillment-policy-service)
+
+## <a name="fulfillment-policy-service"></a>Fulfillment Policy Service

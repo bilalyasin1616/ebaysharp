@@ -22,5 +22,6 @@ namespace Ebaysharp.Entities
         {
             return _filter.NextPage != null;
         }
+
     }
 }
