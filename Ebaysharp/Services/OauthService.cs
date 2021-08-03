@@ -43,7 +43,7 @@ namespace Ebaysharp.Services
             Request.AddHeader("Authorization", "Basic " + ClientToken.oauthCredentials);
             Request.AddHeader("content-type", "application/x-www-form-urlencoded");
             Request.AddParameter("grant_type", "client_credentials");
-            Request.AddParameter("scope", "https://api.ebay.com/oauth/api_scope https://api.ebay.com/oauth/api_scope/buy.guest.order https://api.ebay.com/oauth/api_scope/buy.item.feedS https://api.ebay.com/oauth/api_scope/buy.marketing");
+            Request.AddParameter("scope", ClientToken.scopes);
             var response = await RequestClient.ExecuteAsync<AccessToken>(Request);
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
