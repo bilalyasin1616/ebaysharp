@@ -9,20 +9,20 @@ namespace Ebaysharp.Services.Inventory
         {
         }
 
-        public async Task AddAsync(string marchentLocationKey, InventoryLocation location)
+        public virtual async Task AddAsync(string marchentLocationKey, InventoryLocation location)
         {
             await CreateAuthorizedRequestJsonAsync($"{InventoryApiUrls.Location}/{marchentLocationKey}", RestSharp.Method.POST);
             Request.AddJsonBody(location);
             await ExecuteRequestAsync();
         }
 
-        public async Task DeleteAsync(string marchentLocationKey)
+        public virtual async Task DeleteAsync(string marchentLocationKey)
         {
             await CreateAuthorizedRequestAsync($"{InventoryApiUrls.Location}/{marchentLocationKey}", RestSharp.Method.DELETE);
             await ExecuteRequestAsync();
         }
 
-        public async Task<EbayList<InventoryLocation, EbayFilter>> GetAllAsync(EbayFilter ebayFilter)
+        public virtual async Task<EbayList<InventoryLocation, EbayFilter>> GetAllAsync(EbayFilter ebayFilter)
         {
             await CreateAuthorizedPagedRequestAsync(ebayFilter, InventoryApiUrls.Location, RestSharp.Method.GET);
             var response = await ExecuteRequestAsync<LocationsRespones>();
@@ -30,7 +30,7 @@ namespace Ebaysharp.Services.Inventory
             return new EbayList<InventoryLocation, EbayFilter>(ebayFilter, response.locations);
         }
 
-        public async Task<InventoryLocation> GetAsync(string marchentLocationKey)
+        public virtual async Task<InventoryLocation> GetAsync(string marchentLocationKey)
         {
             await CreateAuthorizedRequestAsync($"{InventoryApiUrls.Location}/{marchentLocationKey}", RestSharp.Method.GET);
             return await ExecuteRequestAsync<InventoryLocation>();

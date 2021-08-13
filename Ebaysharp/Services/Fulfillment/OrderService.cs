@@ -11,7 +11,7 @@ namespace Ebaysharp.Services.Fulfillment
         {
         }
 
-        public async Task<EbayList<Order, EbayFilter>> GetAllAsync(EbayFilter ebayFilter)
+        public virtual async Task<EbayList<Order, EbayFilter>> GetAllAsync(EbayFilter ebayFilter)
         {
             await CreateAuthorizedPagedRequestAsync(ebayFilter, FulfillmentApiUrls.Order, RestSharp.Method.GET);
             var response = await ExecuteRequestAsync<OrdersResponse>();
@@ -19,7 +19,7 @@ namespace Ebaysharp.Services.Fulfillment
             return new EbayList<Order, EbayFilter>(ebayFilter, response.orders);
         }
 
-        public async Task<string> CreateFulfillmentAsync(ShippingFulfilment shippingFulfilment, string orderId)
+        public virtual async Task<string> CreateFulfillmentAsync(ShippingFulfilment shippingFulfilment, string orderId)
         {
             await CreateAuthorizedRequestAsync($"{FulfillmentApiUrls.Order}/{orderId}/{FulfillmentApiUrls.ShippingFulfillment}", RestSharp.Method.POST);
             Request.AddJsonBody(shippingFulfilment);

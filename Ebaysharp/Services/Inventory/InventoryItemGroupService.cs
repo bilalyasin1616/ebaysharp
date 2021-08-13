@@ -8,8 +8,8 @@ namespace Ebaysharp.Services.Inventory
         public InventoryItemGroupService(ClientToken oauth, AccessToken token) : base(oauth, token)
         {
         }
-        
-        public async Task CreateOrReplaceInventoryItemGroupAsync(InventoryItemGroup inventoryItemGroup, string inventoryItemGroupKey)
+
+        public virtual async Task CreateOrReplaceInventoryItemGroupAsync(InventoryItemGroup inventoryItemGroup, string inventoryItemGroupKey)
         {
             await CreateRequestWithTokenAndContentLanguageAsync($"{InventoryApiUrls.InventoryItemGroupUrl}/{inventoryItemGroupKey}", RestSharp.Method.PUT);
             var jsonBody = Newtonsoft.Json.JsonConvert.SerializeObject(inventoryItemGroup); //need to manually serialize it here due to IDictionary in the model which Restsharp does not serialize it
@@ -17,13 +17,13 @@ namespace Ebaysharp.Services.Inventory
             await ExecuteRequestAsync();
         }
 
-        public async Task<InventoryItemGroup> GetInventoryItemsGroupAsync(string inventoryItemGroupKey)
+        public virtual async Task<InventoryItemGroup> GetInventoryItemsGroupAsync(string inventoryItemGroupKey)
         {
             await CreateAuthorizedRequestAsync($"{InventoryApiUrls.InventoryItemGroupUrl}/{inventoryItemGroupKey}", RestSharp.Method.GET);
             return await ExecuteRequestAsync<InventoryItemGroup>();
         }
 
-        public async Task DeleteGroupInventoryItemsAsync(string inventoryItemGroupKey)
+        public virtual async Task DeleteGroupInventoryItemsAsync(string inventoryItemGroupKey)
         {
             await CreateAuthorizedRequestAsync($"{InventoryApiUrls.InventoryItemGroupUrl}/{inventoryItemGroupKey}", RestSharp.Method.DELETE);
             await ExecuteRequestAsync();

@@ -10,27 +10,27 @@ namespace Ebaysharp.Services.Account
         {
         }
 
-        public async Task<List<PaymentPolicy>> GetAllAsync()
+        public virtual async Task<List<PaymentPolicy>> GetAllAsync()
         {
             await CreateAuthorizedRequestAsync($"{AccountApiUrls.PaymentPolicy}?marketplace_id={UsEbayMarketPlaceId}", RestSharp.Method.GET);
             return (await ExecuteRequestAsync<GetAllPaymentPoliciesResponse>()).paymentPolicies;
         }
 
-        public async Task<PaymentPolicy> AddAsync(PaymentPolicy paymentPolicy)
+        public virtual async Task<PaymentPolicy> AddAsync(PaymentPolicy paymentPolicy)
         {
             await CreateAuthorizedRequestJsonAsync(AccountApiUrls.PaymentPolicy, RestSharp.Method.POST);
             Request.AddJsonBody(paymentPolicy);
             return await ExecuteRequestAsync<PaymentPolicy>();
         }
 
-        public async Task<PaymentPolicy> UpdateAsync(PaymentPolicy paymentPolicy)
+        public virtual async Task<PaymentPolicy> UpdateAsync(PaymentPolicy paymentPolicy)
         {
             await CreateAuthorizedRequestJsonAsync($"{AccountApiUrls.PaymentPolicy}/{paymentPolicy.paymentPolicyId}", RestSharp.Method.PUT);
             Request.AddJsonBody(paymentPolicy);
             return await ExecuteRequestAsync<PaymentPolicy>();
         }
 
-        public async Task DeleteAsync(long paymentPolicyId)
+        public virtual async Task DeleteAsync(long paymentPolicyId)
         {
             await CreateAuthorizedRequestAsync($"{AccountApiUrls.PaymentPolicy}/{paymentPolicyId}", RestSharp.Method.DELETE);
             await ExecuteRequestAsync();

@@ -10,7 +10,7 @@ namespace Ebaysharp.Services.Commerce
         {
         }
 
-        public async Task<User> GetUserAsync()
+        public virtual async Task<User> GetUserAsync()
         {
             await CreateAuthorizedRequestAsync(IdentityApiUrls.GetUser, RestSharp.Method.GET);
             return await ExecuteRequestAsync<User>();

@@ -9,7 +9,7 @@ namespace Ebaysharp.Services.Account
         {
         }
 
-        public async Task<Privilege> GetPrivilegeAsync()
+        public virtual async Task<Privilege> GetPrivilegeAsync()
         {
             await CreateAuthorizedRequestAsync(AccountApiUrls.Privilege, RestSharp.Method.GET);
             return await ExecuteRequestAsync<Privilege>();

@@ -14,7 +14,7 @@ namespace Ebaysharp.Services.Trade
         {
         }
 
-        public async Task<GeteBayDetailsResponse> GetEbayDetailsAsync(string detailName = null)
+        public virtual async Task<GeteBayDetailsResponse> GetEbayDetailsAsync(string detailName = null)
         {
             await RefreshTokenAsync();
             CreateRequest(EbayXmlProductionUrl, RestSharp.Method.POST);

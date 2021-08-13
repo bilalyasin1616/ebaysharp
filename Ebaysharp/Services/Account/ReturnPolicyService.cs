@@ -11,13 +11,13 @@ namespace Ebaysharp.Services.Account
         {
         }
 
-        public async Task<List<ReturnPolicy>> GetAllAsync()
+        public virtual async Task<List<ReturnPolicy>> GetAllAsync()
         {
             await CreateAuthorizedRequestAsync($"{AccountApiUrls.returnPolicy}?marketplace_id={UsEbayMarketPlaceId}", RestSharp.Method.GET);
             return (await ExecuteRequestAsync<GetAllRetrunPoliciesResponse>()).returnPolicies;
         }
 
-        public async Task<ReturnPolicy> AddAsync(ReturnPolicy returnPolicy)
+        public virtual async Task<ReturnPolicy> AddAsync(ReturnPolicy returnPolicy)
         {
             await CreateAuthorizedRequestJsonAsync(AccountApiUrls.returnPolicy, RestSharp.Method.POST);
             Request.AddJsonBody(returnPolicy);
@@ -25,14 +25,14 @@ namespace Ebaysharp.Services.Account
             
         }
 
-        public async Task<ReturnPolicy> UpdateAsync(ReturnPolicy returnPolicy)
+        public virtual async Task<ReturnPolicy> UpdateAsync(ReturnPolicy returnPolicy)
         {
             await CreateAuthorizedRequestJsonAsync($"{AccountApiUrls.returnPolicy}/{returnPolicy.returnPolicyId}", RestSharp.Method.PUT);
             Request.AddJsonBody(returnPolicy);
             return await ExecuteRequestAsync<ReturnPolicy>();
         }
 
-        public async Task DeleteAsync(long returnPolicyId)
+        public virtual async Task DeleteAsync(long returnPolicyId)
         {
             await CreateAuthorizedRequestAsync($"{AccountApiUrls.returnPolicy}/{returnPolicyId}", RestSharp.Method.DELETE);
             await ExecuteRequestAsync();

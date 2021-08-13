@@ -10,7 +10,7 @@ namespace Ebaysharp.Services
         {
         }
 
-        public string GetRedirectUrl(string state)
+        public virtual string GetRedirectUrl(string state)
         {
             return $"{OAuthUrls.AuthUrl}?" +
                 $"client_id={ClientToken.clientId}&" +
@@ -19,7 +19,7 @@ namespace Ebaysharp.Services
                 $"scope={ClientToken.scopes}&prompt=login";
         }
 
-        public async Task<AccessToken> GetAccessTokenAsync(string code)
+        public virtual async Task<AccessToken> GetAccessTokenAsync(string code)
         {
             CreateRequest(OAuthUrls.TokenUrl, RestSharp.Method.POST);
             Request.AddHeader("Authorization", "Basic " + ClientToken.oauthCredentials);
@@ -37,7 +37,7 @@ namespace Ebaysharp.Services
                 throw new Exception("Ebay didn't respond with Ok, See inner exception for detail", new Exception(response.Content));
         }
 
-        public async Task<AccessToken> GetApplicationTokenAsync()
+        public virtual async Task<AccessToken> GetApplicationTokenAsync()
         {
             CreateRequest(OAuthUrls.TokenUrl, RestSharp.Method.POST);
             Request.AddHeader("Authorization", "Basic " + ClientToken.oauthCredentials);
@@ -54,7 +54,7 @@ namespace Ebaysharp.Services
                 throw new Exception("Ebay didn't respond with Ok, See inner exception for detail", new Exception(response.Content));
         }
 
-        public async Task<AccessToken> RefreshTokenAsync(AccessToken token)
+        public virtual async Task<AccessToken> RefreshTokenAsync(AccessToken token)
         {
             CreateRequest(OAuthUrls.RefreshTokenUrl, RestSharp.Method.POST);
             Request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
