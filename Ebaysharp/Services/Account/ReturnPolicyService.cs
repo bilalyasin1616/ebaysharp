@@ -11,15 +11,21 @@ namespace Ebaysharp.Services.Account
         {
         }
 
+        public virtual async Task<ReturnPolicy> GetAsync(long returnPolicyId)
+        {
+            await CreateAuthorizedRequestAsync($"{AccountApiUrls.ReturnPolicy}/{returnPolicyId}", RestSharp.Method.GET);
+            return await ExecuteRequestAsync<ReturnPolicy>();
+        }
+
         public virtual async Task<List<ReturnPolicy>> GetAllAsync()
         {
-            await CreateAuthorizedRequestAsync($"{AccountApiUrls.returnPolicy}?marketplace_id={UsEbayMarketPlaceId}", RestSharp.Method.GET);
+            await CreateAuthorizedRequestAsync($"{AccountApiUrls.ReturnPolicy}?marketplace_id={UsEbayMarketPlaceId}", RestSharp.Method.GET);
             return (await ExecuteRequestAsync<GetAllRetrunPoliciesResponse>()).returnPolicies;
         }
 
         public virtual async Task<ReturnPolicy> AddAsync(ReturnPolicy returnPolicy)
         {
-            await CreateAuthorizedRequestJsonAsync(AccountApiUrls.returnPolicy, RestSharp.Method.POST);
+            await CreateAuthorizedRequestJsonAsync(AccountApiUrls.ReturnPolicy, RestSharp.Method.POST);
             Request.AddJsonBody(returnPolicy);
             return await ExecuteRequestAsync<ReturnPolicy>();
             
@@ -27,14 +33,14 @@ namespace Ebaysharp.Services.Account
 
         public virtual async Task<ReturnPolicy> UpdateAsync(ReturnPolicy returnPolicy)
         {
-            await CreateAuthorizedRequestJsonAsync($"{AccountApiUrls.returnPolicy}/{returnPolicy.returnPolicyId}", RestSharp.Method.PUT);
+            await CreateAuthorizedRequestJsonAsync($"{AccountApiUrls.ReturnPolicy}/{returnPolicy.returnPolicyId}", RestSharp.Method.PUT);
             Request.AddJsonBody(returnPolicy);
             return await ExecuteRequestAsync<ReturnPolicy>();
         }
 
         public virtual async Task DeleteAsync(long returnPolicyId)
         {
-            await CreateAuthorizedRequestAsync($"{AccountApiUrls.returnPolicy}/{returnPolicyId}", RestSharp.Method.DELETE);
+            await CreateAuthorizedRequestAsync($"{AccountApiUrls.ReturnPolicy}/{returnPolicyId}", RestSharp.Method.DELETE);
             await ExecuteRequestAsync();
         }
 

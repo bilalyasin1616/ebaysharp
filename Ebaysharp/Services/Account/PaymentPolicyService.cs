@@ -10,6 +10,12 @@ namespace Ebaysharp.Services.Account
         {
         }
 
+        public virtual async Task<PaymentPolicy> GetAsync(long paymentPolicyId)
+        {
+            await CreateAuthorizedRequestAsync($"{AccountApiUrls.PaymentPolicy}/{paymentPolicyId}", RestSharp.Method.GET);
+            return await ExecuteRequestAsync<PaymentPolicy>();
+        }
+
         public virtual async Task<List<PaymentPolicy>> GetAllAsync()
         {
             await CreateAuthorizedRequestAsync($"{AccountApiUrls.PaymentPolicy}?marketplace_id={UsEbayMarketPlaceId}", RestSharp.Method.GET);

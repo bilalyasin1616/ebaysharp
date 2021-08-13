@@ -122,7 +122,7 @@
         protected class AccountApiUrls
         {
             private readonly static string _resourceBaseUrl = "/sell/account/v1";
-            public static string returnPolicy
+            public static string ReturnPolicy
             {
                 get => $"{ApiBaseUrl}{_resourceBaseUrl}/return_policy";
             }
